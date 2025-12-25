@@ -3,22 +3,12 @@
 
 
 int convert(const char *input){
-  int length = 0;
-  int no = 0;
-  int power = 0;
-  for (int i=0;input[i]!='\0';i++) {
-    if (input[i]!='1' && input[i]!='0'){
-      return INVALID;
+  int result = 0;
+  for (const char *c= input;*c!='\0';c++) {
+    if(*c!='0' && *c!='1'){
+      return INVALID; 
     }
-    ++length;
+    result = result * 2 + (*c == '0' ? 0:1); 
   }
-  for (int i=length-1;i>=0;i--){
-    if (input[i]=='0'){
-      power++;
-      continue;
-    }
-    no+=pow(2,power);
-    power++;
-  }
-  return no;
+  return result;
 }
