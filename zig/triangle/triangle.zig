@@ -1,3 +1,4 @@
+// Errors
 pub const TriangleError = error{
     Invalid
 };
