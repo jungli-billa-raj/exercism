@@ -22,12 +22,37 @@ pub const HighScores = struct {
     }
 
     pub fn personalTopThree(self: *const HighScores) []const i32 {
-        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-        const allocator = gpa.allocator();
-        defer _ = gpa.deinit();
-        var sorted_scores = allocator.alloc(i32, self.scores.len) catch [0]i32{};
-        std.mem.copyForwards(i32, sorted_scores, self.scores);
-        std.sort.block(i32, &sorted_scores, {}, std.sort.asc(i32));
-        return [_]i32{sorted_scores[0],sorted_scores[1],sorted_scores[2]} ;
+       // var topThree:[]const i32 = undefined; 
+
+       var first:i32 = 0;
+       var second:i32 = 0;
+       var third:i32 = 0;
+       for (self.scores, 0..) |v, index|{
+           if (index == 0) {
+               first = v;
+           }
+           if (index == 1){
+               if (v>first){
+                   second = first;
+                   first = v;
+               } else {
+                   second = v;
+               }
+               continue;
+           }
+           if (index>1) {
+            if (v>first){
+                third = second;
+                second = first;
+                first = v;
+            } else if (v>second) {
+                third = second;
+                second = v;
+            } else if (v>third){
+                third = v;
+            }
+           }
+       }
+       return &[_]i32{first,second,third};
     }
 };
