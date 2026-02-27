@@ -4,10 +4,23 @@ pub const HighScores = struct {
     // This struct, as well as its fields and methods, needs to be implemented.
 
     scores: []const i32,
-    top3:[3]i32 = .{0, 0, 0},
+    sorted: [100]i32,
 
     pub fn init(scores: []const i32) HighScores {
-        return .{.scores = scores};
+        // sort 
+        var hs = HighScores{
+            .scores = scores,
+            .sorted = []i32{},
+        };
+
+        //copy of scores in sorted[]
+        for (scores, 0..) |v,i| {
+            hs.sorted[i] = v;
+        }
+
+        std.sort.block(i32, hs.sorted, {}, comptime std.sort.desc(i32));
+
+        return .{.scores = scores, .sorted = hs.sorted };
     }
 
     pub fn latest(self: *const HighScores) ?i32 {
@@ -23,26 +36,28 @@ pub const HighScores = struct {
     }
 
     pub fn personalTopThree(self: *const HighScores) []const i32 {
-      var first:i32 = -1;
-      var second:i32 = -1;
-      var third:i32 = -1;
+      // var first:i32 = -1;
+      // var second:i32 = -1;
+      // var third:i32 = -1;
+      //
+      // for (self.scores) |v|{
+      //   if (v>first){
+      //       third = second;
+      //       second = first;
+      //       first = v;
+      //   } else if (v>second) {
+      //       third = second;
+      //       second = v;
+      //   } else if (v>third){
+      //       third = v;
+      //   }
+      // }
+      // self.top3 =  .{ first, second, third };
+      //
+      // return self.top3[0..];
 
-      for (self.scores) |v|{
-        if (v>first){
-            third = second;
-            second = first;
-            first = v;
-        } else if (v>second) {
-            third = second;
-            second = v;
-        } else if (v>third){
-            third = v;
-        }
-      }
-      self.top3 =  .{ first, second, third };
-
-      return self.top3[0..];
-
+    const n = @min(3, self.sorted.len);
+    return self.sorted[0..n];
     }
 };
 
