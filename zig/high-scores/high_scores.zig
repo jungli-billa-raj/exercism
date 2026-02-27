@@ -4,6 +4,7 @@ pub const HighScores = struct {
     // This struct, as well as its fields and methods, needs to be implemented.
 
     scores: []const i32,
+    top3:[3]i32 = .{0, 0, 0},
 
     pub fn init(scores: []const i32) HighScores {
         return .{.scores = scores};
@@ -22,37 +23,27 @@ pub const HighScores = struct {
     }
 
     pub fn personalTopThree(self: *const HighScores) []const i32 {
-       // var topThree:[]const i32 = undefined; 
+      var first:i32 = -1;
+      var second:i32 = -1;
+      var third:i32 = -1;
 
-       var first:i32 = 0;
-       var second:i32 = 0;
-       var third:i32 = 0;
-       for (self.scores, 0..) |v, index|{
-           if (index == 0) {
-               first = v;
-           }
-           if (index == 1){
-               if (v>first){
-                   second = first;
-                   first = v;
-               } else {
-                   second = v;
-               }
-               continue;
-           }
-           if (index>1) {
-            if (v>first){
-                third = second;
-                second = first;
-                first = v;
-            } else if (v>second) {
-                third = second;
-                second = v;
-            } else if (v>third){
-                third = v;
-            }
-           }
-       }
-       return &[_]i32{first,second,third};
+      for (self.scores) |v|{
+        if (v>first){
+            third = second;
+            second = first;
+            first = v;
+        } else if (v>second) {
+            third = second;
+            second = v;
+        } else if (v>third){
+            third = v;
+        }
+      }
+      self.top3 =  .{ first, second, third };
+
+      return self.top3[0..];
+
     }
 };
+
+//  [ 11, 22, 12, 33, 56, 99, 68, 60 , 32]
