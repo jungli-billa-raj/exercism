@@ -10,7 +10,7 @@ pub const HighScores = struct {
         // sort 
         var hs = HighScores{
             .scores = scores,
-            .sorted = []i32{},
+            .sorted = .{0} ** 100,
         };
 
         //copy of scores in sorted[]
@@ -18,7 +18,7 @@ pub const HighScores = struct {
             hs.sorted[i] = v;
         }
 
-        std.sort.block(i32, hs.sorted, {}, comptime std.sort.desc(i32));
+        std.sort.block(i32, &hs.sorted, {}, comptime std.sort.desc(i32));
 
         return .{.scores = scores, .sorted = hs.sorted };
     }
@@ -56,7 +56,7 @@ pub const HighScores = struct {
       //
       // return self.top3[0..];
 
-    const n = @min(3, self.sorted.len);
+    const n = @min(3, self.scores.len);
     return self.sorted[0..n];
     }
 };
