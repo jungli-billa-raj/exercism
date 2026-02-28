@@ -40,7 +40,19 @@ pub fn colorCode(x:ColorBand) usize {
     //
     return @intFromEnum(x);
 }
+const all_codes = [_]ColorBand{
+    ColorBand.black,
+    ColorBand.brown,
+    ColorBand.red,
+    ColorBand.orange,
+    ColorBand.yellow,
+    ColorBand.green,
+    ColorBand.blue,
+    ColorBand.violet,
+    ColorBand.grey,
+    ColorBand.white,
+};
 
 pub fn colors() []const ColorBand {
-    return ColorBand;
+    return &all_codes;
 }
